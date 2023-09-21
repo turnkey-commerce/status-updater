@@ -1,0 +1,43 @@
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 50;
+}
+
+button.margin-right {
+    margin-right: 25px;
+}
+
+.green-button {
+    background-color:yellow; /* Made the green button yellow because user with AMD couldn't see black text on light green */
+}
+
+.yellow-button {
+    background-color: yellow;
+}
+  
+.button-xlarge {
+    font-size: 400%;
+    font-weight:550;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+.green-button:hover {
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+.yellow-button:hover {
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+.result {
+    height: 60px;
+    line-height: 60px;
+    margin: 1.5rem auto;
+    color: wheat;
+    font-size: 300%;
+    font-weight: bold;
+}

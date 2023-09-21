@@ -1,0 +1,11 @@
+# SMTP credentials for sending email notifications
+SmtpUser     = "yourusername@gmail.com"
+SmtpPassword = "yourpassword"
+SmtpServer   = "smtp.gmail.com"
+SmtpPort     = "587"
+
+# The comma-delimited list of email recipients to receive the updates.
+Recipients = ["JohnDoe@example.com", "JaneDoe@example.com"]
+
+# The name of the person that will use the program.
+Name = "Bill"
