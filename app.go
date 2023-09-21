@@ -9,8 +9,6 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-type Recipient string
-
 var Settings struct {
 	SmtpUser     string `valid:"-"`
 	SmtpPassword string `valid:"-"`
@@ -18,13 +16,13 @@ var Settings struct {
 	SmtpPort     string `valid:"int,required"`
 	Recipients   []string
 	Name         string `valid:"-"`
+	Button1Label string `valid:"-"`
+	Button2Label string `valid:"-"`
 }
 
 var configFile = "config.toml"
-
-func init() {
-
-}
+var Button1Label = "I'm OK"
+var Button2Label = "Call Me"
 
 // App struct
 type App struct {
@@ -48,6 +46,14 @@ func Init() {
 		log.Println(err)
 	}
 	// log.Println(Settings)
+
+	if len(Settings.Button1Label) > 0 {
+		Button1Label = Settings.Button1Label
+	}
+
+	if len(Settings.Button2Label) > 0 {
+		Button2Label = Settings.Button2Label
+	}
 }
 
 // AmOK sends the email that all is OK.

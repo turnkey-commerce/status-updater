@@ -9,3 +9,7 @@ Recipients = ["JohnDoe@example.com", "JaneDoe@example.com"]
 
 # The name of the person that will use the program.
 Name = "Bill"
+
+# The labels on the buttons. Can be changed to support alternate languages or different purposes.
+Button1Label = "I'm OK"
+Button2Label = "Call Me"
