@@ -26,6 +26,30 @@ email was successfully sent:
 
 ![App after button pressed](https://github.com/turnkey-commerce/status-updater/blob/master/screenshots/status-updater-screen2.png)
 
+## Running the Application
+
+Currently the application is available as a binary
+executable for the Windows 64-bit environment. You can
+download and run the program as follows:
+
+1. Download the latest executable from the
+[Releases](https://github.com/turnkey-commerce/status-updater/releases).
+
+2. Extract the zip to a folder.
+
+3. Edit the config.toml file for the email SMTP
+settings, the recipients email list, and the name of
+the user that will use the program.
+
+4. The program can then be tested by clicking on the
+status-updater.exe file.  If all works as expected
+it can be distributed to the user, being sure to
+keep it with the config.toml file.
+
+5. For better ease of use for the end user you can
+right-mouse drag the status-updater.exe to the user's
+desktop and create a shortcut to the program.
+
 ## Development
 
 If you wish to modify the way the application works you can use the following steps to set up a development environment.
