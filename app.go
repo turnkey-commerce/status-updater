@@ -7,6 +7,7 @@ import (
 	"net/smtp"
 
 	"github.com/BurntSushi/toml"
+	rt "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 var Settings struct {
@@ -38,10 +39,10 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
-	Init()
+	a.Init()
 }
 
-func Init() {
+func (a *App) Init() {
 	if _, err := toml.DecodeFile(configFile, &Settings); err != nil {
 		log.Println(err)
 	}
@@ -54,6 +55,9 @@ func Init() {
 	if len(Settings.Button2Label) > 0 {
 		Button2Label = Settings.Button2Label
 	}
+
+	rt.EventsEmit(a.ctx, "setButtonText", Button1Label, Button2Label)
+	log.Println(Button1Label, Button2Label)
 }
 
 // AmOK sends the email that all is OK.
@@ -62,7 +66,7 @@ func (a *App) AmOk() string {
 	return fmt.Sprintf(smtpStatus)
 }
 
-// AmOK sends the email to call the requester.
+// CallMe sends the email to call the requester.
 func (a *App) CallMe() string {
 	smtpStatus := SendMessage("Status Updater - Call Me", Settings.Name+" sent the message \"Call Me\".")
 	return fmt.Sprintf(smtpStatus)

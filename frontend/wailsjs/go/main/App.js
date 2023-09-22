@@ -9,3 +9,7 @@ export function AmOk() {
 export function CallMe() {
   return window['go']['main']['App']['CallMe']();
 }
+
+export function Init() {
+  return window['go']['main']['App']['Init']();
+}

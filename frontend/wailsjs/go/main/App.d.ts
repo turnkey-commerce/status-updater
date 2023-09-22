@@ -4,3 +4,5 @@
 export function AmOk():Promise<string>;
 
 export function CallMe():Promise<string>;
+
+export function Init():Promise<void>;

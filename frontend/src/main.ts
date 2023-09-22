@@ -1,14 +1,26 @@
 import './style.css';
 import './app.css';
+import { EventsOn } from "../wailsjs/runtime/runtime.js"; // the runtime for Wails2
 
-import {AmOk} from '../wailsjs/go/main/App';
-import {CallMe} from '../wailsjs/go/main/App';
+import {AmOk, CallMe} from '../wailsjs/go/main/App';
 
-let timeout = 7000;
+let resultShowTimeMs = 7000;
+
+let button1Text = "I'm OK"
+let button2Text = "Call Me"
+
+// Listen for events from the backend.
+//
+EventsOn("setButtonText", (button1, button2) => {
+    button1Element.innerText = button1
+    button2Element.innerText = button2
+    console.log(button1, button2)
+});
+
 
 // Setup the amOK function
 window.amOk = function () {
-    greenButtonElement.disabled = true;
+    button1Element.disabled = true;
     // Call App.AmOk()
     try {
         AmOk()
@@ -17,9 +29,9 @@ window.amOk = function () {
                 resultElement!.innerText = result;
                 setTimeout(() => {
                     resultElement!.innerText = ""
-                    greenButtonElement.disabled = false;
+                    button1Element.disabled = false;
                 },
-                timeout);
+                resultShowTimeMs);
             })
             .catch((err) => {
                 console.error(err);
@@ -31,7 +43,7 @@ window.amOk = function () {
 
 // Setup the callMe function
 window.callMe = function () {
-    yellowButtonElement.disabled = true;
+    button2Element.disabled = true;
     // Call App.CallMe()
     try {
         CallMe()
@@ -40,9 +52,9 @@ window.callMe = function () {
                 resultElement!.innerText = result;
                 setTimeout(() => {
                     resultElement!.innerText = ""
-                    yellowButtonElement.disabled = false
+                    button2Element.disabled = false
                 },
-                timeout);
+                resultShowTimeMs);
             })
             .catch((err) => {
                 console.error(err);
@@ -54,15 +66,15 @@ window.callMe = function () {
 
 document.querySelector('#app')!.innerHTML = `
     <div class="button-container">
-        <button id="greenButton" class="button-xlarge margin-right green-button" onclick="amOk()">I'm OK</button>
-        <button id="yellowButton" class="button-xlarge yellow-button" onclick="callMe()">Call Me</button>
+        <button id="button1" class="button-xlarge margin-right green-button" onclick="amOk()">`+ button1Text + `</button>
+        <button id="button2" class="button-xlarge yellow-button" onclick="callMe()">` + button2Text + `</button>
     </div>
     <div class="result" id="result"></div>
 `;
 
 let resultElement = document.getElementById("result");
-let greenButtonElement = <HTMLInputElement> document.getElementById("greenButton")
-let yellowButtonElement = <HTMLInputElement> document.getElementById("yellowButton")
+let button1Element = <HTMLInputElement> document.getElementById("button1")
+let button2Element = <HTMLInputElement> document.getElementById("button2")
 
 declare global {
     interface Window {
