@@ -30,6 +30,7 @@ func main() {
 		AlwaysOnTop:      false,
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		OnStartup:        app.startup,
+		OnDomReady:       app.domReady,
 		Bind: []interface{}{
 			app,
 		},

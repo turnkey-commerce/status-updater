@@ -42,6 +42,10 @@ func (a *App) startup(ctx context.Context) {
 	a.Init()
 }
 
+func (a *App) domReady(ctx context.Context) {
+	rt.EventsEmit(ctx, "setButtonText", Button1Label, Button2Label)
+}
+
 func (a *App) Init() {
 	if _, err := toml.DecodeFile(configFile, &Settings); err != nil {
 		log.Println(err)
@@ -55,9 +59,6 @@ func (a *App) Init() {
 	if len(Settings.Button2Label) > 0 {
 		Button2Label = Settings.Button2Label
 	}
-
-	rt.EventsEmit(a.ctx, "setButtonText", Button1Label, Button2Label)
-	log.Println(Button1Label, Button2Label)
 }
 
 // AmOK sends the email that all is OK.
