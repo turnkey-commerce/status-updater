@@ -37,16 +37,19 @@ download and run the program as follows:
 
 2. Extract the zip to a folder.
 
-3. Edit the config.toml file for the email SMTP
-settings, the recipients email list, and the name of
-the user that will use the program.
+3. Copy example.config.toml file to config.toml.
 
-4. The program can then be tested by clicking on the
+4. Edit the config.toml file for the email SMTP
+settings, the recipients email list, and the name of
+the user that will use the program. Optionally you can
+edit the button labels that will be seen by the user.
+
+5. The program can then be tested by clicking on the
 status-updater.exe file.  If all works as expected
 it can be distributed to the user, being sure to
 keep it with the config.toml file.
 
-5. For better ease of use for the end user you can
+6. For better ease of use for the end user you can
 right-mouse drag the status-updater.exe to the user's
 desktop and create a shortcut to the program.
 

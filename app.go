@@ -63,13 +63,13 @@ func (a *App) Init() {
 
 // AmOK sends the email that all is OK.
 func (a *App) AmOk() string {
-	smtpStatus := SendMessage("Status Updater - I'm OK", Settings.Name+" sent the message \"I'm OK\".")
+	smtpStatus := SendMessage("Status Updater - "+Settings.Button1Label, Settings.Name+" sent the message \""+Settings.Button1Label+"\".")
 	return fmt.Sprintf(smtpStatus)
 }
 
 // CallMe sends the email to call the requester.
 func (a *App) CallMe() string {
-	smtpStatus := SendMessage("Status Updater - Call Me", Settings.Name+" sent the message \"Call Me\".")
+	smtpStatus := SendMessage("Status Updater - "+Settings.Button2Label, Settings.Name+" sent the message \""+Settings.Button2Label+"\".")
 	return fmt.Sprintf(smtpStatus)
 }
 

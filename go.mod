@@ -1,4 +1,4 @@
-module changeme
+module status-updater
 
 go 1.18
 
