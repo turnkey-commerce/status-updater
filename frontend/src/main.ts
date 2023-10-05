@@ -2,7 +2,7 @@ import './style.css';
 import './app.css';
 import { EventsOn } from "../wailsjs/runtime/runtime.js"; // the runtime for Wails2
 
-import {AmOk, CallMe} from '../wailsjs/go/main/App';
+import {Button1Action, Button2Action} from '../wailsjs/go/main/App';
 
 let resultShowTimeMs = 7000;
 
@@ -18,14 +18,14 @@ EventsOn("setButtonText", (button1, button2) => {
 });
 
 
-// Setup the amOK function
-window.amOk = function () {
+// Setup the button1Action function
+window.button1Action = function () {
     button1Element.disabled = true;
-    // Call App.AmOk()
+    // Call App.Button1Action()
     try {
-        AmOk()
+        Button1Action()
             .then((result) => {
-                // Update result with data back from App.AmOK()
+                // Update result with data back from App.Button1Action()
                 resultElement!.innerText = result;
                 setTimeout(() => {
                     resultElement!.innerText = ""
@@ -41,14 +41,14 @@ window.amOk = function () {
     }
 };
 
-// Setup the callMe function
-window.callMe = function () {
+// Setup the button2Action function
+window.button2Action = function () {
     button2Element.disabled = true;
-    // Call App.CallMe()
+    // Call App.Button2Action()
     try {
-        CallMe()
+        Button2Action()
             .then((result) => {
-                // Update result with data back from App.CallMe()
+                // Update result with data back from App.Button2Action()
                 resultElement!.innerText = result;
                 setTimeout(() => {
                     resultElement!.innerText = ""
@@ -66,8 +66,8 @@ window.callMe = function () {
 
 document.querySelector('#app')!.innerHTML = `
     <div class="button-container">
-        <button id="button1" class="button-xlarge margin-right green-button" onclick="amOk()">`+ button1Text + `</button>
-        <button id="button2" class="button-xlarge yellow-button" onclick="callMe()">` + button2Text + `</button>
+        <button id="button1" class="button-xlarge margin-right green-button" onclick="button1Action()">`+ button1Text + `</button>
+        <button id="button2" class="button-xlarge yellow-button" onclick="button2Action()">` + button2Text + `</button>
     </div>
     <div class="result" id="result"></div>
 `;
@@ -78,8 +78,8 @@ let button2Element = <HTMLInputElement> document.getElementById("button2")
 
 declare global {
     interface Window {
-        amOk: () => void;
-        callMe: () => void;
+        button1Action: () => void;
+        button2Action: () => void;
     }
 }
 

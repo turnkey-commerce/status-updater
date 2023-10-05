@@ -61,14 +61,14 @@ func (a *App) Init() {
 	}
 }
 
-// AmOK sends the email that all is OK.
-func (a *App) AmOk() string {
+// Button1Action sends the message with the Button 2 labels.
+func (a *App) Button1Action() string {
 	smtpStatus := SendMessage("Status Updater - "+Settings.Button1Label, Settings.Name+" sent the message \""+Settings.Button1Label+"\".")
 	return fmt.Sprintf(smtpStatus)
 }
 
-// CallMe sends the email to call the requester.
-func (a *App) CallMe() string {
+// Button2Action sends the message with the Button 2 labels.
+func (a *App) Button2Action() string {
 	smtpStatus := SendMessage("Status Updater - "+Settings.Button2Label, Settings.Name+" sent the message \""+Settings.Button2Label+"\".")
 	return fmt.Sprintf(smtpStatus)
 }
