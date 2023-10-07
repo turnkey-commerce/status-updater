@@ -7,5 +7,10 @@ SmtpPort     = "587"
 # The comma-delimited list of email recipients to receive the updates.
 Recipients = ["JohnDoe@example.com", "JaneDoe@example.com"]
 
-# The name of the person that will use the program.
+# The name of the person that will use the program and send the updates.
 Name = "Bill"
+
+# The labels on the buttons. Can be changed to support alternate languages or different purposes.
+# Try to keep the length short because of the button size.
+Button1Label = "I'm OK"
+Button2Label = "Call Me"

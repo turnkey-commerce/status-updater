@@ -7,9 +7,8 @@ import (
 	"net/smtp"
 
 	"github.com/BurntSushi/toml"
+	rt "github.com/wailsapp/wails/v2/pkg/runtime"
 )
-
-type Recipient string
 
 var Settings struct {
 	SmtpUser     string `valid:"-"`
@@ -18,13 +17,13 @@ var Settings struct {
 	SmtpPort     string `valid:"int,required"`
 	Recipients   []string
 	Name         string `valid:"-"`
+	Button1Label string `valid:"-"`
+	Button2Label string `valid:"-"`
 }
 
 var configFile = "config.toml"
-
-func init() {
-
-}
+var Button1Label = "I'm OK"
+var Button2Label = "Call Me"
 
 // App struct
 type App struct {
@@ -40,25 +39,37 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
-	Init()
+	a.Init()
 }
 
-func Init() {
+func (a *App) domReady(ctx context.Context) {
+	rt.EventsEmit(ctx, "setButtonText", Button1Label, Button2Label)
+}
+
+func (a *App) Init() {
 	if _, err := toml.DecodeFile(configFile, &Settings); err != nil {
 		log.Println(err)
 	}
 	// log.Println(Settings)
+
+	if len(Settings.Button1Label) > 0 {
+		Button1Label = Settings.Button1Label
+	}
+
+	if len(Settings.Button2Label) > 0 {
+		Button2Label = Settings.Button2Label
+	}
 }
 
-// AmOK sends the email that all is OK.
-func (a *App) AmOk() string {
-	smtpStatus := SendMessage("Status Updater - I'm OK", Settings.Name+" sent the message \"I'm OK\".")
+// Button1Action sends the message with the Button 2 labels.
+func (a *App) Button1Action() string {
+	smtpStatus := SendMessage("Status Updater - "+Settings.Button1Label, Settings.Name+" sent the message \""+Settings.Button1Label+"\".")
 	return fmt.Sprintf(smtpStatus)
 }
 
-// AmOK sends the email to call the requester.
-func (a *App) CallMe() string {
-	smtpStatus := SendMessage("Status Updater - Call Me", Settings.Name+" sent the message \"Call Me\".")
+// Button2Action sends the message with the Button 2 labels.
+func (a *App) Button2Action() string {
+	smtpStatus := SendMessage("Status Updater - "+Settings.Button2Label, Settings.Name+" sent the message \""+Settings.Button2Label+"\".")
 	return fmt.Sprintf(smtpStatus)
 }
 
