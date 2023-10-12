@@ -53,6 +53,36 @@ keep it with the config.toml file.
 right-mouse drag the status-updater.exe to the user's
 desktop and create a shortcut to the program.
 
+## Configuration File
+
+The config.toml configuration file needs to be present with the
+executable file for the configuration of the SMTP server, the
+email recipients, and the name of the end user. Additionally
+the button labels can be changed for alternate languages or to
+send different messages than the default "I'm OK" and "Call Me".
+
+The contents of the configuration file are as follows and
+are available in the example.config.toml.
+
+```text
+# SMTP credentials for sending email notifications
+SmtpUser     = "yourusername@gmail.com"
+SmtpPassword = "yourpassword"
+SmtpServer   = "smtp.gmail.com"
+SmtpPort     = "587"
+
+# The comma-delimited list of email recipients to receive the updates.
+Recipients = ["JohnDoe@example.com", "JaneDoe@example.com"]
+
+# The name of the person that will use the program and send the updates.
+Name = "Bill"
+
+# The labels on the buttons. Can be changed to support alternate languages or different purposes.
+# Try to keep the length short because of the button size.
+Button1Label = "I'm OK"
+Button2Label = "Call Me"
+```
+
 ## Development
 
 If you wish to modify the way the application works you can use the following steps to set up a development environment.
