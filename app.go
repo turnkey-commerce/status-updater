@@ -89,6 +89,12 @@ func (a *App) Button2Action() string {
 	return fmt.Sprintf(smtpStatus)
 }
 
+// SaveAction saves the configuration
+func (a *App) SaveAction(userName string, password string) string {
+	saveStatus := "Saved!" + userName + password
+	return fmt.Sprintf(saveStatus)
+}
+
 func SendMessage(subject string, message string) string {
 	smtpStatus := "Email Sent"
 	err := SendEmail(subject, message)

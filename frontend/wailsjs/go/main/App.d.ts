@@ -9,3 +9,5 @@ export function Button2Action():Promise<string>;
 export function Init():Promise<void>;
 
 export function Menu():Promise<menu.Menu>;
+
+export function SaveAction(arg1:string,arg2:string):Promise<string>;

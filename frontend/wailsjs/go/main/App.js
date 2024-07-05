@@ -17,3 +17,7 @@ export function Init() {
 export function Menu() {
   return window['go']['main']['App']['Menu']();
 }
+
+export function SaveAction(arg1, arg2) {
+  return window['go']['main']['App']['SaveAction'](arg1, arg2);
+}
