@@ -17,6 +17,15 @@ EventsOn("setButtonText", (button1, button2) => {
     console.log(button1, button2)
 });
 
+EventsOn("configure", () => {
+    // Popup Configuration window.
+    configurationElement!.innerText = "Configure";
+    setTimeout(() => {
+        configurationElement!.innerText = ""
+    },
+    resultShowTimeMs);
+});
+
 
 // Setup the button1Action function
 window.button1Action = function () {
@@ -65,6 +74,8 @@ window.button2Action = function () {
 };
 
 document.querySelector('#app')!.innerHTML = `
+    <div class="configuration-container" id="configuration">
+    </div>
     <div class="button-container">
         <button id="button1" class="button-xlarge margin-right green-button" onclick="button1Action()">`+ button1Text + `</button>
         <button id="button2" class="button-xlarge yellow-button" onclick="button2Action()">` + button2Text + `</button>
@@ -75,6 +86,7 @@ document.querySelector('#app')!.innerHTML = `
 let resultElement = document.getElementById("result");
 let button1Element = <HTMLInputElement> document.getElementById("button1")
 let button2Element = <HTMLInputElement> document.getElementById("button2")
+let configurationElement = document.getElementById("configuration");
 
 declare global {
     interface Window {

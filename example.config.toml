@@ -3,6 +3,7 @@ SmtpUser     = "yourusername@gmail.com"
 SmtpPassword = "yourpassword"
 SmtpServer   = "smtp.gmail.com"
 SmtpPort     = "587"
+FromEmail    = "sender@example.org"
 
 # The comma-delimited list of email recipients to receive the updates.
 Recipients = ["JohnDoe@example.com", "JaneDoe@example.com"]

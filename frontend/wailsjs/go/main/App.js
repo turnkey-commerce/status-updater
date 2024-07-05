@@ -13,3 +13,7 @@ export function Button2Action() {
 export function Init() {
   return window['go']['main']['App']['Init']();
 }
+
+export function Menu() {
+  return window['go']['main']['App']['Menu']();
+}

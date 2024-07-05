@@ -41,3 +41,9 @@ button.margin-right {
     font-size: 300%;
     font-weight: bold;
 }
+
+.configuration-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10;
+}

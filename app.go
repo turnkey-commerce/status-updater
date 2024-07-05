@@ -7,6 +7,7 @@ import (
 	"net/smtp"
 
 	"github.com/BurntSushi/toml"
+	"github.com/wailsapp/wails/v2/pkg/menu"
 	rt "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -15,6 +16,7 @@ var Settings struct {
 	SmtpPassword string `valid:"-"`
 	SmtpServer   string `valid:"-"`
 	SmtpPort     string `valid:"int,required"`
+	FromEmail    string `valid:"-"`
 	Recipients   []string
 	Name         string `valid:"-"`
 	Button1Label string `valid:"-"`
@@ -35,15 +37,29 @@ func NewApp() *App {
 	return &App{}
 }
 
+func (a *App) Menu() *menu.Menu {
+	AppMenu := menu.NewMenu()
+	ConfigureMenu := AppMenu.AddSubmenu("Configuration")
+	ConfigureMenu.AddText("&Configure", nil, menuCallbackEmit(a, "configure"))
+	return AppMenu
+}
+
 // startup is called when the app starts. The context is saved
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
+
 	a.ctx = ctx
 	a.Init()
 }
 
 func (a *App) domReady(ctx context.Context) {
 	rt.EventsEmit(ctx, "setButtonText", Button1Label, Button2Label)
+}
+
+func menuCallbackEmit(a *App, eventName string, data ...interface{}) func(cd *menu.CallbackData) {
+	return func(cd *menu.CallbackData) {
+		rt.EventsEmit(a.ctx, eventName, data...)
+	}
 }
 
 func (a *App) Init() {
@@ -91,12 +107,12 @@ func SendEmail(subject string, message string) error {
 	smtpPassword := Settings.SmtpPassword
 	auth := smtp.PlainAuth("", smtpUser, smtpPassword, smtpServer)
 	server := smtpServer + ":" + smtpPort
-	from := "sender@example.org"
+	fromEmail := Settings.FromEmail
 
 	msg := []byte("Subject: " + subject + "\r\n\r\n" +
 		message + "\r\n")
 
-	err := smtp.SendMail(server, auth, from, Settings.Recipients, msg)
+	err := smtp.SendMail(server, auth, fromEmail, Settings.Recipients, msg)
 	if err != nil {
 		return err
 	}
