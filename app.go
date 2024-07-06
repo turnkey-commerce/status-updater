@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/smtp"
+	"os"
 
 	"github.com/BurntSushi/toml"
 	"github.com/wailsapp/wails/v2/pkg/menu"
@@ -90,8 +91,31 @@ func (a *App) Button2Action() string {
 }
 
 // SaveAction saves the configuration
-func (a *App) SaveAction(userName string, password string) string {
-	saveStatus := "Saved!" + userName + password
+func (a *App) SaveAction(smtpUserName string, smtpPassword string) string {
+	key := []byte("p04lCUCXBjDIlpiN1dIjRauOghtmL8f1") // 32 bytes https://acte.ltd/utils/randomkeygen
+
+	smtpUserNameByte, err := encrypt(key, []byte(smtpUserName))
+	smtpPasswordByte, err := encrypt(key, []byte(smtpPassword))
+	if err != nil {
+		return err.Error()
+	}
+
+	Settings.SmtpUser = fmt.Sprintf("%x", smtpUserNameByte)
+	Settings.SmtpPassword = fmt.Sprintf("%x", smtpPasswordByte)
+
+	configWrite, err := os.Create(configFile)
+	if err != nil {
+		return err.Error()
+	}
+	if err := toml.NewEncoder(configWrite).Encode(&Settings); err != nil {
+		// failed to encode
+		return err.Error()
+	}
+	if err := configWrite.Close(); err != nil {
+		// failed to close the file
+		return err.Error()
+	}
+	saveStatus := "Saved! " + smtpUserName + ", " + smtpPassword
 	return fmt.Sprintf(saveStatus)
 }
 
