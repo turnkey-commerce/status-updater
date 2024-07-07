@@ -40,7 +40,9 @@ EventsOn("configure", () => {
             <button class="button-small" id="saveButton" onclick="saveAction()">Save</button>
         </div>
     `;
-    saveElement = <HTMLInputElement> document.getElementById("saveButton")
+    saveElement = <HTMLInputElement> document.getElementById("saveButton");
+
+    buttonsElement.style.display = "none";
     saveElement.disabled = false;
 });
 
@@ -103,9 +105,10 @@ window.saveAction = function () {
                 // Update result with data back from App.SaveAction()
                 resultElement!.innerText = result;
                 setTimeout(() => {
-                    resultElement!.innerText = ""
-                    saveElement.disabled = false
+                    resultElement!.innerText = "";
+                    saveElement.disabled = false;
                     configurationElement!.innerHTML = "";
+                    buttonsElement!.style.display = "block";
                 },
                 resultShowTimeMs);
             })
@@ -120,7 +123,7 @@ window.saveAction = function () {
 document.querySelector('#app')!.innerHTML = `
     <div class="configuration" id="configuration">
     </div>
-    <div class="button-container">
+    <div class="button-container" id="buttons">
         <button id="button1" class="button-xlarge margin-right green-button" onclick="button1Action()">`+ button1Text + `</button>
         <button id="button2" class="button-xlarge yellow-button" onclick="button2Action()">` + button2Text + `</button>
     </div>
@@ -130,6 +133,7 @@ document.querySelector('#app')!.innerHTML = `
 let resultElement = document.getElementById("result");
 let button1Element = <HTMLInputElement> document.getElementById("button1")
 let button2Element = <HTMLInputElement> document.getElementById("button2")
+let buttonsElement = <HTMLInputElement> document.getElementById("buttons")
 let configurationElement = document.getElementById("configuration");
 let saveElement = <HTMLInputElement> document.getElementById("saveButton")
 

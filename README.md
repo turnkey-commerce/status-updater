@@ -66,8 +66,9 @@ are available in the example.config.toml.
 
 ```text
 # SMTP credentials for sending email notifications
-SmtpUser     = "yourusername@gmail.com"
-SmtpPassword = "yourpassword"
+SmtpUser     = ""  # Will be set as an encrypted string by the Configuration menu.
+SmtpPassword = ""  # Will be set as an encrypted string by the Configuration menu.
+EncryptionKey = "p04lCUCXBjDIlpiN1dIjRauOghtmL8f1"  # 32 bytes https://acte.ltd/utils/randomkeygen
 SmtpServer   = "smtp.gmail.com"
 SmtpPort     = "587"
 FromEmail    = "sender@example.org"

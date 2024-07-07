@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/hex"
 	"fmt"
 	"log"
 	"net/smtp"
@@ -13,15 +14,16 @@ import (
 )
 
 var Settings struct {
-	SmtpUser     string `valid:"-"`
-	SmtpPassword string `valid:"-"`
-	SmtpServer   string `valid:"-"`
-	SmtpPort     string `valid:"int,required"`
-	FromEmail    string `valid:"-"`
-	Recipients   []string
-	Name         string `valid:"-"`
-	Button1Label string `valid:"-"`
-	Button2Label string `valid:"-"`
+	EncryptionKey string `valid:"-"`
+	SmtpUser      string `valid:"-"`
+	SmtpPassword  string `valid:"-"`
+	SmtpServer    string `valid:"-"`
+	SmtpPort      string `valid:"int,required"`
+	FromEmail     string `valid:"-"`
+	Recipients    []string
+	Name          string `valid:"-"`
+	Button1Label  string `valid:"-"`
+	Button2Label  string `valid:"-"`
 }
 
 var configFile = "config.toml"
@@ -48,7 +50,6 @@ func (a *App) Menu() *menu.Menu {
 // startup is called when the app starts. The context is saved
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
-
 	a.ctx = ctx
 	a.Init()
 }
@@ -92,30 +93,11 @@ func (a *App) Button2Action() string {
 
 // SaveAction saves the configuration
 func (a *App) SaveAction(smtpUserName string, smtpPassword string) string {
-	key := []byte("p04lCUCXBjDIlpiN1dIjRauOghtmL8f1") // 32 bytes https://acte.ltd/utils/randomkeygen
-
-	smtpUserNameByte, err := encrypt(key, []byte(smtpUserName))
-	smtpPasswordByte, err := encrypt(key, []byte(smtpPassword))
+	err := EncryptCredentials(smtpUserName, smtpPassword)
+	saveStatus := "Saved!"
 	if err != nil {
-		return err.Error()
+		saveStatus = fmt.Sprint("Problem Saving Configuration: " + err.Error())
 	}
-
-	Settings.SmtpUser = fmt.Sprintf("%x", smtpUserNameByte)
-	Settings.SmtpPassword = fmt.Sprintf("%x", smtpPasswordByte)
-
-	configWrite, err := os.Create(configFile)
-	if err != nil {
-		return err.Error()
-	}
-	if err := toml.NewEncoder(configWrite).Encode(&Settings); err != nil {
-		// failed to encode
-		return err.Error()
-	}
-	if err := configWrite.Close(); err != nil {
-		// failed to close the file
-		return err.Error()
-	}
-	saveStatus := "Saved! " + smtpUserName + ", " + smtpPassword
 	return fmt.Sprintf(saveStatus)
 }
 
@@ -131,10 +113,12 @@ func SendMessage(subject string, message string) string {
 // SendEmail provides the implementation of the EmailSender type for runtime usage.
 func SendEmail(subject string, message string) error {
 	// Set up authentication information.
-	smtpUser := Settings.SmtpUser
+	smtpUser, smtpPassword, err := DecryptCredentials()
+	if err != nil {
+		return err
+	}
 	smtpServer := Settings.SmtpServer
 	smtpPort := Settings.SmtpPort
-	smtpPassword := Settings.SmtpPassword
 	auth := smtp.PlainAuth("", smtpUser, smtpPassword, smtpServer)
 	server := smtpServer + ":" + smtpPort
 	fromEmail := Settings.FromEmail
@@ -142,10 +126,49 @@ func SendEmail(subject string, message string) error {
 	msg := []byte("Subject: " + subject + "\r\n\r\n" +
 		message + "\r\n")
 
-	err := smtp.SendMail(server, auth, fromEmail, Settings.Recipients, msg)
+	err = smtp.SendMail(server, auth, fromEmail, Settings.Recipients, msg)
 	if err != nil {
 		return err
 	}
 
+	return nil
+}
+
+func DecryptCredentials() (smtpUser string, smtpPassword string, err error) {
+	smtpUserEncrypted, err := hex.DecodeString(Settings.SmtpUser)
+	smtpPasswordEncrypted, err := hex.DecodeString(Settings.SmtpPassword)
+	if err != nil {
+		return "", "", err
+	}
+
+	smtpUserDecrypted, err := decrypt([]byte(Settings.EncryptionKey), smtpUserEncrypted)
+	smtpPasswordDecrypted, err := decrypt([]byte(Settings.EncryptionKey), smtpPasswordEncrypted)
+	if err != nil {
+		return "", "", err
+	}
+
+	return fmt.Sprintf("%s", smtpUserDecrypted), fmt.Sprintf("%s", smtpPasswordDecrypted), nil
+}
+
+func EncryptCredentials(smtpUserName string, smtpPassword string) (err error) {
+	smtpUserNameByte, err := encrypt([]byte(Settings.EncryptionKey), []byte(smtpUserName))
+	smtpPasswordByte, err := encrypt([]byte(Settings.EncryptionKey), []byte(smtpPassword))
+	if err != nil {
+		return err
+	}
+
+	Settings.SmtpUser = hex.EncodeToString(smtpUserNameByte)
+	Settings.SmtpPassword = hex.EncodeToString(smtpPasswordByte)
+
+	configWriter, err := os.Create(configFile)
+	if err != nil {
+		return err
+	}
+	if err := toml.NewEncoder(configWriter).Encode(&Settings); err != nil {
+		return err
+	}
+	if err := configWriter.Close(); err != nil {
+		return err
+	}
 	return nil
 }
