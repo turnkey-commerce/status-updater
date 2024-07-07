@@ -2,9 +2,10 @@ import './style.css';
 import './app.css';
 import { EventsOn } from "../wailsjs/runtime/runtime.js"; // the runtime for Wails2
 
-import {Button1Action, Button2Action, SaveAction} from '../wailsjs/go/main/App';
+import {Button1Action, Button2Action, SaveAction, GetCredentials} from '../wailsjs/go/main/App';
 
 let resultShowTimeMs = 7000;
+let saveShowTimeMs = 3500;
 
 let button1Text = "I'm OK"
 let button2Text = "Call Me"
@@ -41,6 +42,13 @@ EventsOn("configure", () => {
         </div>
     `;
     saveElement = <HTMLInputElement> document.getElementById("saveButton");
+    passwordElement = <HTMLInputElement> document.getElementById("password");
+    userNameElement = <HTMLInputElement> document.getElementById("userName");
+
+    GetCredentials().then((credentials) => {
+        userNameElement.value = credentials.smtpUser;
+        passwordElement.value = credentials.smtpPassword;
+    })
 
     buttonsElement.style.display = "none";
     saveElement.disabled = false;
@@ -110,7 +118,7 @@ window.saveAction = function () {
                     configurationElement!.innerHTML = "";
                     buttonsElement!.style.display = "block";
                 },
-                resultShowTimeMs);
+                saveShowTimeMs);
             })
             .catch((err) => {
                 console.error(err);
@@ -135,13 +143,16 @@ let button1Element = <HTMLInputElement> document.getElementById("button1")
 let button2Element = <HTMLInputElement> document.getElementById("button2")
 let buttonsElement = <HTMLInputElement> document.getElementById("buttons")
 let configurationElement = document.getElementById("configuration");
-let saveElement = <HTMLInputElement> document.getElementById("saveButton")
+let saveElement = <HTMLInputElement> document.getElementById("saveButton");
+let passwordElement = <HTMLInputElement> document.getElementById("password");
+let userNameElement = <HTMLInputElement> document.getElementById("userName");
 
 declare global {
     interface Window {
         button1Action: () => void;
         button2Action: () => void;
         saveAction: () => void;
+        getCredentials: () => void;
     }
 }
 

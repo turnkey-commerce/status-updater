@@ -19,11 +19,11 @@ func main() {
 	err := wails.Run(&options.App{
 		Title:     "Status Updater",
 		Width:     600,
-		Height:    300,
+		Height:    325,
 		MaxWidth:  600,
-		MaxHeight: 300,
+		MaxHeight: 325,
 		MinWidth:  600,
-		MinHeight: 300,
+		MinHeight: 325,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},

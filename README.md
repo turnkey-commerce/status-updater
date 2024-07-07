@@ -44,12 +44,18 @@ settings, the recipients email list, and the name of
 the user that will use the program. Optionally you can
 edit the button labels that will be seen by the user.
 
-5. The program can then be tested by clicking on the
+5. Start the program by clicking on the status-updater.exe
+file. Use the Configuration -> Configure menu to set the
+SMTP User and Password for the email settings. This will
+write the encrypted settings back to the config.toml so that
+they are not visible as plain text.
+
+6. The program can then be tested by clicking on the
 status-updater.exe file.  If all works as expected
 it can be distributed to the user, being sure to
 keep it with the config.toml file.
 
-6. For better ease of use for the end user you can
+7. For better ease of use for the end user you can
 right-mouse drag the status-updater.exe to the user's
 desktop and create a shortcut to the program.
 
@@ -63,6 +69,12 @@ send different messages than the default "I'm OK" and "Call Me".
 
 The contents of the configuration file are as follows and
 are available in the example.config.toml.
+
+Also, it is recommended to change the Encryption key to a
+different one before the program is first run. The website
+[Random Key Generator](https://acte.ltd/utils/randomkeygen)
+can be used to randomly generate it using the "Encryption key
+256" option for a 32 byte key.
 
 ```text
 # SMTP credentials for sending email notifications

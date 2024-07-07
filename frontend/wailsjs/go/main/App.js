@@ -10,6 +10,10 @@ export function Button2Action() {
   return window['go']['main']['App']['Button2Action']();
 }
 
+export function GetCredentials() {
+  return window['go']['main']['App']['GetCredentials']();
+}
+
 export function Init() {
   return window['go']['main']['App']['Init']();
 }

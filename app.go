@@ -26,6 +26,11 @@ var Settings struct {
 	Button2Label  string `valid:"-"`
 }
 
+type Credentials struct {
+	SmtpUser     string `json:"smtpUser"`
+	SmtpPassword string `json:"smtpPassword"`
+}
+
 var configFile = "config.toml"
 var Button1Label = "I'm OK"
 var Button2Label = "Call Me"
@@ -132,6 +137,18 @@ func SendEmail(subject string, message string) error {
 	}
 
 	return nil
+}
+
+func (a *App) GetCredentials() (credentials Credentials) {
+	smtpUser, smtpPassword, err := DecryptCredentials()
+	if err != nil {
+		credentials.SmtpUser = ""
+		credentials.SmtpPassword = ""
+		return credentials
+	}
+	credentials.SmtpUser = smtpUser
+	credentials.SmtpPassword = smtpPassword
+	return credentials
 }
 
 func DecryptCredentials() (smtpUser string, smtpPassword string, err error) {
