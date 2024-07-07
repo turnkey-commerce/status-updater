@@ -19,14 +19,15 @@ func main() {
 	err := wails.Run(&options.App{
 		Title:     "Status Updater",
 		Width:     600,
-		Height:    300,
+		Height:    325,
 		MaxWidth:  600,
-		MaxHeight: 300,
+		MaxHeight: 325,
 		MinWidth:  600,
-		MinHeight: 300,
+		MinHeight: 325,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
+		Menu:             app.Menu(),
 		AlwaysOnTop:      false,
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		OnStartup:        app.startup,

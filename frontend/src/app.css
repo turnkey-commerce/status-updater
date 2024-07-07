@@ -23,6 +23,14 @@ button.margin-right {
     margin-top: 50px;
 }
 
+.button-small {
+    font-size: 100%;
+    padding: 5px;
+    margin-top: 10px;
+    background-color: green;
+    color: white;
+}
+
 .green-button:hover {
     border: 2px solid white;
     cursor: pointer;
@@ -40,4 +48,31 @@ button.margin-right {
     color: wheat;
     font-size: 300%;
     font-weight: bold;
+}
+
+.configuration-container {
+    display: flex;
+    justify-content: left;
+    margin-top: 50;
+    width: 250 px;
+}
+
+input[type=text], [type=password], select, textarea {
+  width: 90%;
+  border: 1px solid #ccc;
+  resize: vertical;
+  margin: 2px;
+  font-family: arial, helvetica;
+}
+
+.col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+}
+
+.col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
 }

@@ -10,6 +10,18 @@ export function Button2Action() {
   return window['go']['main']['App']['Button2Action']();
 }
 
+export function GetCredentials() {
+  return window['go']['main']['App']['GetCredentials']();
+}
+
 export function Init() {
   return window['go']['main']['App']['Init']();
+}
+
+export function Menu() {
+  return window['go']['main']['App']['Menu']();
+}
+
+export function SaveAction(arg1, arg2) {
+  return window['go']['main']['App']['SaveAction'](arg1, arg2);
 }

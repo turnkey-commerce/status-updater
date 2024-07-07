@@ -2,9 +2,10 @@ import './style.css';
 import './app.css';
 import { EventsOn } from "../wailsjs/runtime/runtime.js"; // the runtime for Wails2
 
-import {Button1Action, Button2Action} from '../wailsjs/go/main/App';
+import {Button1Action, Button2Action, SaveAction, GetCredentials} from '../wailsjs/go/main/App';
 
 let resultShowTimeMs = 7000;
+let saveShowTimeMs = 3500;
 
 let button1Text = "I'm OK"
 let button2Text = "Call Me"
@@ -17,6 +18,41 @@ EventsOn("setButtonText", (button1, button2) => {
     console.log(button1, button2)
 });
 
+EventsOn("configure", () => {
+    // Create Configuration window.
+    configurationElement!.innerHTML = `
+        <div class="row">
+            <div class="col-25">
+                <label for="userName">SMTP Username</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="userName" name="userName">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="password">SMTP Password</label>
+            </div>
+            <div class="col-75">
+                <input type="password" id="password" name="password">
+            </div>
+        </div>
+        <div class="row">
+            <button class="button-small" id="saveButton" onclick="saveAction()">Save</button>
+        </div>
+    `;
+    saveElement = <HTMLInputElement> document.getElementById("saveButton");
+    passwordElement = <HTMLInputElement> document.getElementById("password");
+    userNameElement = <HTMLInputElement> document.getElementById("userName");
+
+    GetCredentials().then((credentials) => {
+        userNameElement.value = credentials.smtpUser;
+        passwordElement.value = credentials.smtpPassword;
+    })
+
+    buttonsElement.style.display = "none";
+    saveElement.disabled = false;
+});
 
 // Setup the button1Action function
 window.button1Action = function () {
@@ -64,8 +100,38 @@ window.button2Action = function () {
     }
 };
 
+// Setup the Configuration Save function
+window.saveAction = function () {
+    saveElement.disabled = true;
+    let passwordElement = <HTMLInputElement> document.getElementById("password");
+    let password = passwordElement.value;
+    let userNameElement = <HTMLInputElement> document.getElementById("userName");
+    let userName = userNameElement.value;
+    try {
+        SaveAction(userName, password)
+            .then((result) => {
+                // Update result with data back from App.SaveAction()
+                resultElement!.innerText = result;
+                setTimeout(() => {
+                    resultElement!.innerText = "";
+                    saveElement.disabled = false;
+                    configurationElement!.innerHTML = "";
+                    buttonsElement!.style.display = "block";
+                },
+                saveShowTimeMs);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    } catch (err) {
+        console.error(err);
+    }
+};
+
 document.querySelector('#app')!.innerHTML = `
-    <div class="button-container">
+    <div class="configuration" id="configuration">
+    </div>
+    <div class="button-container" id="buttons">
         <button id="button1" class="button-xlarge margin-right green-button" onclick="button1Action()">`+ button1Text + `</button>
         <button id="button2" class="button-xlarge yellow-button" onclick="button2Action()">` + button2Text + `</button>
     </div>
@@ -75,11 +141,18 @@ document.querySelector('#app')!.innerHTML = `
 let resultElement = document.getElementById("result");
 let button1Element = <HTMLInputElement> document.getElementById("button1")
 let button2Element = <HTMLInputElement> document.getElementById("button2")
+let buttonsElement = <HTMLInputElement> document.getElementById("buttons")
+let configurationElement = document.getElementById("configuration");
+let saveElement = <HTMLInputElement> document.getElementById("saveButton");
+let passwordElement = <HTMLInputElement> document.getElementById("password");
+let userNameElement = <HTMLInputElement> document.getElementById("userName");
 
 declare global {
     interface Window {
         button1Action: () => void;
         button2Action: () => void;
+        saveAction: () => void;
+        getCredentials: () => void;
     }
 }
 
